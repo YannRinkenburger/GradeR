@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GradeScope — Business Informatics B.Sc.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="site-header">
+    <div>
+      <h1>Grade<em>Scope</em></h1>
+      <p>Business Informatics B.Sc. · DHBW · Updated 03/2026</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="header-tag" id="totalEctsTag">210 ECTS total</span>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle light / dark mode">
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="summary">
+    <div class="card" id="cardAvg">
+      <div class="card-label">⌀ GPA</div>
+      <div class="card-value" id="sumAvg">—</div>
+      <div id="sumPill"></div>
+      <div class="card-split" id="avgSplit" style="display:none">
+        <div class="card-split-row">
+          <span class="card-split-label">confirmed</span>
+          <span class="card-split-val val-confirmed" id="avgConfirmed">—</span>
+        </div>
+        <div class="card-split-row">
+          <span class="card-split-label">with forecast</span>
+          <span class="card-split-val val-predicted" id="avgPredicted">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">ECTS</div>
+      <div class="card-value" id="sumEctsGraded">0</div>
+      <div class="card-sub">of <span id="totalGradedEcts">—</span> total</div>
+      <div class="card-split" id="ectsSplit" style="display:none">
+        <div class="card-split-row">
+          <span class="card-split-label">confirmed</span>
+          <span class="card-split-val val-confirmed" id="ectsConfirmed">—</span>
+        </div>
+        <div class="card-split-row">
+          <span class="card-split-label">with forecast</span>
+          <span class="card-split-val val-predicted" id="ectsPredicted">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Modules</div>
+      <div class="card-value" id="sumModules">0</div>
+      <div class="card-sub">of <span id="totalGradedModules">—</span> graded</div>
+      <div class="card-split" id="modSplit" style="display:none">
+        <div class="card-split-row">
+          <span class="card-split-label">confirmed</span>
+          <span class="card-split-val val-confirmed" id="modsConfirmed">—</span>
+        </div>
+        <div class="card-split-row">
+          <span class="card-split-label">with forecast</span>
+          <span class="card-split-val val-predicted" id="modsPredicted">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Progress</div>
+      <div class="progress-arc" id="arcWrap">
+        <svg class="arc-svg" viewBox="0 0 56 56" width="56" height="56">
+          <circle class="arc-bg" cx="28" cy="28" r="23" />
+          <circle class="arc-fill" id="arcFillPred" cx="28" cy="28" r="23"
+            stroke-dasharray="144.5" stroke-dashoffset="144.5"
+            style="stroke:var(--amber);opacity:0.35" />
+          <circle class="arc-fill" id="arcFill" cx="28" cy="28" r="23"
+            stroke-dasharray="144.5" stroke-dashoffset="144.5" />
+        </svg>
+        <div class="arc-text" id="arcText">0%</div>
+      </div>
+      <div class="card-split" id="arcSplit" style="display:none;margin-top:8px">
+        <div class="card-split-row">
+          <span class="card-split-label">confirmed</span>
+          <span class="card-split-val val-confirmed" id="arcConfirmed">—</span>
+        </div>
+        <div class="card-split-row">
+          <span class="card-split-label">with forecast</span>
+          <span class="card-split-val val-predicted" id="arcPredicted">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabBar">
+    <button class="tab active" onclick="showYear(0)">All Modules</button>
+    <button class="tab" onclick="showYear(1)">Year 1</button>
+    <button class="tab" onclick="showYear(2)">Year 2</button>
+    <button class="tab" onclick="showYear(3)">Year 3</button>
+    <button class="tab" onclick="showYear(4)">Electives</button>
+  </div>
+
+  <div class="summary-legend" style="display:flex;gap:16px;margin-bottom:1rem;font-size:12px;font-family:'DM Mono',monospace;">
+    <span style="color:var(--amber)">──  forecast</span>
+    <span style="color:var(--green)">──  confirmed</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th class="r" style="width:64px">ECTS</th>
+          <th class="r" style="width:110px">Grade</th>
+          <th class="r" style="width:90px">Weighted</th>
+        </tr>
+      </thead>
+      <tbody id="moduleBody"></tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="clearAll()">Clear all grades</button>
+    <button class="btn btn-accent" onclick="exportSummary()">Copy summary</button>
+    <span class="hint">Grades are saved automatically</span>
+  </div>
+
+  <footer>Valid grades: 1.0 to 4.0 in steps of 0.1 · Grades above 4.0 are considered failing</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
